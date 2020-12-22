@@ -1,1 +1,3 @@
-console.log('Hello world');
+import App from './patterns/FabricaMethod';
+
+App();
