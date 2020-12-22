@@ -43,13 +43,14 @@ class SeaLogistics extends Logistics {
 }
 
 const App = () => {
-  let logistics: Logistics;
-  if (Math.random() > 0.5) {
-    logistics = new RoadLogistics();
-  } else {
-    logistics = new SeaLogistics();
-  }
-  const transport = logistics.planDelivery();
+  const logistics = [
+    new RoadLogistics(),
+    new SeaLogistics()
+  ];
+  const rand = Math.floor(Math.random() * logistics.length);
+  console.log('rand = ' + rand)
+  const logistic = logistics[rand];
+  const transport = logistic.planDelivery();
   transport.delivery('NY', 'London');
 }
 
