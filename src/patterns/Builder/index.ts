@@ -1,5 +1,5 @@
 interface IBuilder {
-  reset: () => void,
+  reset: () => this,
   addPartA: () => this,
   addPartB: () => this,
   addPartC: () => this,
@@ -22,6 +22,7 @@ class FirstBuilder implements IBuilder {
 
   reset() {
     this.product = new FirstProduct();
+    return this;
   }
   addPartA() {
     this.product.parts.push('A');
@@ -42,12 +43,30 @@ class FirstBuilder implements IBuilder {
   }
 }
 
+class Director {
+  getAB(builder: IBuilder) {
+    return builder.reset().addPartA().addPartB();
+  }
+  getBAC(builder: IBuilder) {
+    return builder.reset().addPartB().addPartA().addPartC();
+  }
+}
+
 const Main = (builder: IBuilder) => {
+  const director = new Director();
+
+  // Custom builder use
   builder.addPartA()
          .addPartB()
          .addPartC();
-  const result = builder.getResult();
-  console.log(result.toString());
+  console.log(builder.getResult().toString());
+
+  // Use some pre-defined builds from the Director class
+  director.getAB(builder);
+  console.log(builder.getResult().toString());
+
+  director.getBAC(builder);
+  console.log(builder.getResult().toString());
 }
 
 const App = () => {
