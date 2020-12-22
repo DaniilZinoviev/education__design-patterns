@@ -41,19 +41,14 @@ class SeaLogistics implements ILogistics {
 }
 
 class Logistics {
-  deliverType: string = '';
   planDelivery() {
-    if ( Math.random() > 0.5 ) {
-      this.deliverType = 'land';
-    } else {
-      this.deliverType = 'sea';
-    }
-    console.log(`Planned delivery by ${this.deliverType}.`);
-    
+    const transport = Logistics.createTransport();
+    transport.delivery('NY', 'London');
+    console.log(`Planned delivery by ${transport.constructor.name}.`);
   }
-  createTransport() {
+  static createTransport() {
     let logistic;
-    if (this.deliverType === 'land') {
+    if ( Math.random() > 0.5 ) {
       logistic = new RoadLogistics();
     } else {
       logistic = new SeaLogistics();
@@ -65,8 +60,6 @@ class Logistics {
 const App = () => {
   const logistics = new Logistics();
   logistics.planDelivery();
-  const transport = logistics.createTransport();
-  transport.delivery('NY', 'London');
 }
 
 export default App;
