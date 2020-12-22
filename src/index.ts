@@ -1,3 +1,3 @@
-import App from './patterns/FabricaMethod';
+import App from './patterns/FactoryMethod';
 
 App();
