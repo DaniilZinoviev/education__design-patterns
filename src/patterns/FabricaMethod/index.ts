@@ -1,16 +1,14 @@
 interface ITransport {
   delivery: (from: string, to: string) => void,
-  // Etc..
-}
-
-interface ILogistics {
-  createTransport: () => ITransport,
-  checkWeather: () => void,
+  getName: () => string,
 }
 
 class Truck implements ITransport {
   delivery(from: string, to: string) {
     console.log(`[Truck] will deliver from ${from} to ${to} by road.`);
+  }
+  getName() {
+    return 'Truck';
   }
 }
 
@@ -18,48 +16,41 @@ class Ship implements ITransport {
   delivery(from: string, to: string) {
     console.log(`[Ship] will deliver from ${from} to ${to} by sea.`);
   }
+  getName() {
+    return 'Ship';
+  }
 }
 
-class RoadLogistics implements ILogistics {
+abstract class Logistics {
+  planDelivery() {
+    const transport = this.createTransport();
+    console.log(`Planned delivery by ${transport.getName()}.`);
+    return transport;
+  }
+  abstract createTransport(): ITransport
+}
+
+class RoadLogistics extends Logistics {
   createTransport(): ITransport {
     return new Truck();
   }
-
-  checkWeather() {
-    console.log('The weather over land is clear. Our Trucks is good enough to deliver in any weather.');
-  }
 }
 
-class SeaLogistics implements ILogistics {
+class SeaLogistics extends Logistics {
   createTransport(): ITransport {
     return new Ship();
-  }
-
-  checkWeather() {
-    console.log('The weather over sea is clear. Good enough for our ships.')
-  }
-}
-
-class Logistics {
-  planDelivery() {
-    const transport = Logistics.createTransport();
-    transport.delivery('NY', 'London');
-    console.log(`Planned delivery by ${transport.constructor.name}.`);
-  }
-  static createTransport() {
-    let logistic;
-    if ( Math.random() > 0.5 ) {
-      logistic = new RoadLogistics();
-    } else {
-      logistic = new SeaLogistics();
-    }
-    return logistic.createTransport();
   }
 }
 
 const App = () => {
-  const logistics = new Logistics();
-  logistics.planDelivery();
+  let logistics: Logistics;
+  if (Math.random() > 0.5) {
+    logistics = new RoadLogistics();
+  } else {
+    logistics = new SeaLogistics();
+  }
+  const transport = logistics.planDelivery();
+  transport.delivery('NY', 'London');
 }
 
 export default App;
