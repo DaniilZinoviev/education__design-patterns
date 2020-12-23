@@ -10,5 +10,6 @@
 /**
  * Structural patterns
  */
+import App from './patterns/Structural/Adapter';
 
-// App();
+App();
